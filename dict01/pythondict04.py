@@ -78,7 +78,6 @@ def main():
     # using the list()
     print(list(switch.values())[2]) # this selects the 2nd position (3rd item) from the list
 
-
 # call our main function
 if __name__ == "__main__":
     main()
