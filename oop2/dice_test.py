@@ -7,6 +7,9 @@ Creating a simple dice program utilizing classes."""
 from cheatdice import Player
 from cheatdice import Cheat_Swapper
 from cheatdice import Cheat_Loaded_Dice
+from cheatdice import Cheat_Saboteur
+from cheatdice import Mulligan_Cheater
+from cheatdice import Additional_Dice_Cheat
 
 def main():
     """run-time code"""
