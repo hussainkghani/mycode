@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Guess the number of continents</title>
+</head>
+<body>
+    <h1>How many continents are there in the world?</h1>
+    <form method="post" action="{{ url_for('guess_result') }}">
+        <input type="text" name="index" />
+        <input type="submit" value="Submit" />
+    </form>
+</body>
+</html>
+
