@@ -3,9 +3,9 @@ import random
 cyber_net = {
     "Home Page": ["Welcome to Megaman's Homepage! Proceed if you would like to bust some viruses.", "Virus"],
     "ACDC Area": ["You have entered the net for ACDC town.", "Virus"],
-    "Sci Lab": ["You have entered the net for SciLab, a research faicility located in Den City", "Virus"],
+    "Sci Lab": ["You have entered the net for SciLab, a research facility located in Den City", "Virus"],
     "Oran Island": ["You have entered Oran Island, home to an abandoned mining facility", "Virus"],
-    "Undernet": ["You have entered the Undernet, a dark and tweisted network in the depths of cyberspace", "Boss"],
+    "Undernet": ["You have entered the Undernet, a dark and twisted network in the depths of cyberspace", "Boss"],
     "Secret Area": ["Only the strong will survive...", "Secret Boss"],
     "Exit": ["Congrats, you've mastered virus busting"]
 }
@@ -20,8 +20,6 @@ exits = {
     "Secret Area": ["Undernet", "Exit"],
     "Exit": []
 }
-# battlechips that player can use to fight viruses
-
 
 class Virus:
     def __init__(self):
@@ -217,7 +215,7 @@ def fight_virus():
                 break
 
         elif player_fight_virus.lower() == "n":
-            print("You cannot proceed until you defeat the virus.")
+            print("You cannot reach the Undernet until you defeat the virus.")
             break
         else:
             print("Invalid input. Please enter 'y' or 'n'.")
@@ -245,10 +243,23 @@ while True:
         fight_virus()
 
     if current_room == "Undernet" and "Boss" in cyber_net[current_room]:
-       fight_boss()
+       while True:
+            if "Oran Island" in cyber_net and "Virus" not in cyber_net["Oran Island"]:    
+                fight_boss()
+                break
+            if "Oran Island" in cyber_net and "Virus" in cyber_net["Oran Island"][1]:
+                print("You must go back and defeat all viruses before facing the final boss")
+                break 
+
 
     if current_room == "Secret Area" and "Secret Boss" in cyber_net[current_room]:
-        fight_secret_boss()
+        while True:
+            if "Undernet" in cyber_net and "Boss" in cyber_net["Undernet"]:
+                fight_secret_boss()
+                break
+            if "Undernet" in cyber_net and "Boss" in cyber_net["Undernet"][1]:
+                print("The Secret Area is available to only those who are worthy...Please defeat the Undernet Navi to proceed")
+                break
 
     # Check which room exits the player wants to take
     available_exits = exits[current_room]
