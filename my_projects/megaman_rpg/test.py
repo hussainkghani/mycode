@@ -1,13 +1,13 @@
-import random 
+import random
 
 cyber_net = {
-    "Home Page": "Welcome to Megaman's Homepage! Proceed if you would like to bust some viruses.",
-    "ACDC Area": "You have entered the net for ACDC town.",
-    "Sci Lab": "You have entered the net for SciLab, a research faicility located in Den City",
-    "Oran Island": "You have entered Oran Island, home to an abandoned mining facility",
-    "Undernet": "You have entered the Undernet, a dark and tweisted network in the depths of cyberspace",
-    "Secret Area": "Only the strong will survive...",
-    "Exit": "Congrats, you've mastered virus busting"
+    "Home Page": ["Welcome to Megaman's Homepage! Proceed if you would like to bust some viruses.", "Virus"],
+    "ACDC Area": ["You have entered the net for ACDC town.", "Virus"],
+    "Sci Lab": ["You have entered the net for SciLab, a research faicility located in Den City", "Virus"],
+    "Oran Island": ["You have entered Oran Island, home to an abandoned mining facility", "Virus"],
+    "Undernet": ["You have entered the Undernet, a dark and tweisted network in the depths of cyberspace", "Boss"],
+    "Secret Area": ["Only the strong will survive...", "Secret Boss"],
+    "Exit": ["Congrats, you've mastered virus busting"]
 }
 
 # Define exits for the player depending on which room they are in
@@ -42,7 +42,8 @@ class Virus:
     def virus_attack_player(self):
         print(f"{self.name} attacks and deals {self.attack} damage!")
 
-    def virus_take_damage(self):
+    def virus_take_damage(self, damage):
+        self.hp -= damage
         if self.hp <= 0:
             print(f"{self.name} virus has been deleted.")
 
@@ -61,7 +62,8 @@ class Boss:
     def boss_attack_player(self):
         print(f"{self.name} attacks and deals {self.attack} damage!")
 
-    def boss_take_damage(self):
+    def boss_take_damage(self, damage):
+        self.hp -= damage
         if self.hp <= 0:
             print(f"{self.name} has been deleted.")
 
@@ -93,7 +95,7 @@ class Secret_Boss:
         self.hp = 500
 
     def secret_boss_attack(self):
-        #randomy select battle chip from dictionary
+        # randomy select battle chip from dictionary
         chip, power = random.choice(list(self.dark_chips.items()))
         print(f"{self.name} atacks with {chip} dealing {power} damage!")
 
@@ -107,7 +109,7 @@ class Megaman:
     def __init__(self):
         self.name = "Megaman"
         self.hp = 1000
-        #moved battlechip dictionary into Class due to accessibility issues
+        # moved battlechip dictionary into Class due to accessibility issues
         self.battle_chips = {
             "long_sword": 80,
             "wide_sword": 80,
@@ -131,7 +133,7 @@ class Megaman:
         }
 
     def megaman_attack(self):
-        #randomly select a battle chip from self.battle_chips dictionary
+        # randomly select a battle chip from self.battle_chips dictionary
         chip, power = random.choice(list(self.battle_chips.items()))
         print(f"{self.name} atacks with {chip} dealing {power} damage!")
 
@@ -140,12 +142,92 @@ class Megaman:
         if self.hp <= 0:
             print(f"{self.name} has been deleted! Game Over!")
 
+def fight_boss():
+    megaman = Megaman()
+    boss = Boss()
+    print(f"Evil Navi {boss.name} appeared with {boss.hp} HP.")
+
+    while True: 
+        player_fight_boss = input(f"Would you like to fight {boss.name}? (y/n) ")
+        if player_fight_boss.lower() == "y":
+            while megaman.hp > 0 and boss.hp > 0:
+                megaman.megaman_attack()
+                boss.boss_take_damage(megaman.battle_chips[random.choice(list(megaman.battle_chips.keys()))])
+                if boss.hp > 0:
+                    boss.boss_attack_player()
+                    # pass damage inflicted by Virus to megaman_take_damage()
+                    megaman.megaman_take_damage(boss.attack)
+                else:
+                    del cyber_net[current_room][1]
+                    print(f"You defeated the Navi {boss.name}")
+                    break
+            if boss.hp <= 0:
+                break
+            else: 
+                print("Megaman Deleted!")
+                break
+        elif player_fight_boss.lower() == "n":
+            print("You cannot proceed until you defeat the virus.")
+            break
+        else:
+            print("Invalid input. Please enter 'y' or 'n'.")
+
+def fight_secret_boss():
+    megaman = Megaman()
+    secret_boss = Secret_Boss()
+    print(f"Whoa a {secret_boss.name} appeared with {secret_boss.hp} HP.")
+    while megaman.hp > 0 and secret_boss.hp > 0:
+        megaman.megaman_attack()
+        secret_boss.secret_boss_take_damage(megaman.battle_chips[random.choice(list(megaman.battle_chips.keys()))])
+        if secret_boss.hp > 0:
+            secret_boss.secret_boss_attack()
+            megaman.megaman_take_damage(secret_boss.dark_chips[random.choice(list(secret_boss.dark_chips.keys()))])
+        else:
+            break
+    if megaman.hp > 0 and secret_boss.hp <= 0:
+        del cyber_net[current_room][1]
+        print(f"You defeated the evil {secret_boss.name}")
+    else:
+        print("Game Over")
+
+def fight_virus():
+    megaman = Megaman()
+    virus = Virus()
+    print(f"A {virus.name} virus appeared with {virus.hp} HP.")
+    
+    while True:
+        player_fight_virus = input("Would you like to fight the virus? (y/n) ")
+        if player_fight_virus.lower() == "y":
+            while megaman.hp > 0 and virus.hp > 0:
+                megaman.megaman_attack()
+                virus.virus_take_damage(
+                megaman.battle_chips[random.choice(list(megaman.battle_chips.keys()))])
+                if virus.hp > 0:
+                    virus.virus_attack_player()
+                    # pass damage inflicted by Virus to megaman_take_damage()
+                    megaman.megaman_take_damage(virus.attack)
+                else:
+                    del cyber_net[current_room][1]
+                    print(f"You defeated the {virus.name} virus! Please proceed forward")
+                    break
+            if virus.hp <= 0:
+                break
+            else:
+                print("Megaman deleted!")
+                break
+
+        elif player_fight_virus.lower() == "n":
+            print("You cannot proceed until you defeat the virus.")
+            break
+        else:
+            print("Invalid input. Please enter 'y' or 'n'.")
+
 current_room = "Home Page"
 
 # Create the session state for the game using a while loop
 while True:
     # Display a description of the room to the player
-    print(cyber_net[current_room])
+    print(cyber_net[current_room][0])
     player_instance = Megaman()
 
     # condition to check if the player has reached the end of the game
@@ -153,36 +235,25 @@ while True:
         print("You have reached the end of the game.")
         break
 
-    if current_room == "ACDC Area" and "virus" in cyber_net[current_room]:
-        virus_instance = Virus()
-        virus_name = virus_instance.name
-        print(f"There is a {virus_name} in this room, defeat it to continue.")
+    if current_room == "ACDC Area" and "Virus" in cyber_net[current_room]:
+        fight_virus()
 
-        while True:
-            fight_virus = input("Would you like to fight the virus? (y/n)")
+    if current_room == "Sci Lab" and "Virus" in cyber_net[current_room]:
+        fight_virus()
+    
+    if current_room == "Oran Island" and "Virus" in cyber_net[current_room]:
+        fight_virus()
 
-            if fight_virus.lower() == "y":
-                player_instance.attack
-                virus_instance.attack
-                virus_instance.virus_take_damage
-                if virus_instance.hp <= 0:
-                    print(f"You defeated the {virus_name}! Please proceed to the next area")
-                    break
-                else:
-                    print(f"You were not able to defeat the {virus_name} virus. Please try again.")
-            
-            elif fight_virus.lower() =="n":
-                print("You cannot proceed until you defeat the virus.")
-                break
+    if current_room == "Undernet" and "Boss" in cyber_net[current_room]:
+       fight_boss()
 
-            else:
-                print("Invalid input. Please enter 'y' or 'n'.")
+    if current_room == "Secret Area" and "Secret Boss" in cyber_net[current_room]:
+        fight_secret_boss()
 
     # Check which room exits the player wants to take
     available_exits = exits[current_room]
     print("Available Exits:", available_exits)
-    chosen_exit = input(
-        "Which of these areas would you like to proceed towards?")
+    chosen_exit = input("Which of these areas would you like to proceed towards? ")
 
     # Condition for whether or not the chosen exit is valid
     if chosen_exit in available_exits:
