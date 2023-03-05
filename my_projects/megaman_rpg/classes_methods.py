@@ -1,38 +1,13 @@
-#!/usr/bin/python3
-
 import random
-# Create a simple RPG game for the video game character Megaman.exe
-
-# Display a start Menu to users with Title, start game, close game
-
-# Once megaman is logged into the net he will start in ACDC Area
-
-# Areas will be ACDC, SciLab, Oran_Island, Undernet, Secret_Area
-
-# Megaman will battle viruses in each area in order to earn bug frags
-
-# He will have option to skip the areas without bosses to finish the game, but he will not be able to access the secret area and face the secret boss without clearing each room
-
-# Megaman will be given a folder of battlechips to be used
-
-# turn based combat system where the player will attack first followed by an enemy attack
-
-# Megaman will have a starting HP of 1000 and the player will have the option to bypass rooms without a boss
-
-# Battle Chip Library will include recovery chips so that the player doesn't have to restart
-
-# Boss Battle will be Dark_Megaman
-
-# Secret area battle will be Bass after beating every virus/boss and collecting the bug frags
 
 cyber_net = {
-    "Home Page": "Welcome to Megaman's Homepage! Proceed if you would like to bust some viruses.",
-    "ACDC Area": "You have entered the net for ACDC town.",
-    "Sci Lab": "You have entered the net for SciLab, a research faicility located in Den City",
-    "Oran Island": "You have entered Oran Island, home to an abandoned mining facility",
-    "Undernet": "You have entered the Undernet, a dark and tweisted network in the depths of cyberspace",
-    "Secret Area": "Only the strong will survive...",
-    "Exit": "Congrats, you've mastered virus busting"
+    "Home Page": ["Welcome to Megaman's Homepage! Proceed if you would like to bust some viruses.", "Virus"],
+    "ACDC Area": ["You have entered the net for ACDC town.", "Virus"],
+    "Sci Lab": ["You have entered the net for SciLab, a research facility located in Den City", "Virus"],
+    "Oran Island": ["You have entered Oran Island, home to an abandoned mining facility", "Virus"],
+    "Undernet": ["You have entered the Undernet, a dark and twisted network in the depths of cyberspace", "Boss"],
+    "Secret Area": ["Only the strong will survive...", "Secret Boss"],
+    "Exit": ["Congrats, you've mastered virus busting"]
 }
 
 # Define exits for the player depending on which room they are in
@@ -45,7 +20,6 @@ exits = {
     "Secret Area": ["Undernet", "Exit"],
     "Exit": []
 }
-# battlechips that player can use to fight viruses
 
 
 class Virus:
@@ -65,11 +39,12 @@ class Virus:
         self.attack = virus[2]
 
     def virus_attack_player(self):
-        print(f"{self.name} attacks and deals {self.attack} damage!")
+        print(f"\t{self.name} attacks and deals {self.attack} damage!")
 
-    def virus_take_damage(self):
+    def virus_take_damage(self, damage):
+        self.hp -= damage
         if self.hp <= 0:
-            print(f"{self.name} virus has been deleted.")
+            print(f"\t{self.name} virus has been deleted.")
 
 
 class Boss:
@@ -84,11 +59,12 @@ class Boss:
         self.attack = boss[2]
 
     def boss_attack_player(self):
-        print(f"{self.name} attacks and deals {self.attack} damage!")
+        print(f"\t{self.name} attacks and deals {self.attack} damage!")
 
-    def boss_take_damage(self):
+    def boss_take_damage(self, damage):
+        self.hp -= damage
         if self.hp <= 0:
-            print(f"{self.name} has been deleted.")
+            print(f"\t{self.name} has been deleted.")
 
 
 class Secret_Boss:
@@ -118,21 +94,21 @@ class Secret_Boss:
         self.hp = 500
 
     def secret_boss_attack(self):
-        #randomy select battle chip from dictionary
+        # randomy select battle chip from dictionary
         chip, power = random.choice(list(self.dark_chips.items()))
-        print(f"{self.name} atacks with {chip} dealing {power} damage!")
+        print(f"\t{self.name} atacks with {chip} dealing {power} damage!")
 
     def secret_boss_take_damage(self, damage):
         self.hp -= damage
         if self.hp <= 0:
-            print(f"{self.name} has been deleted!")
+            print(f"\t{self.name} has been deleted!")
 
 
 class Megaman:
     def __init__(self):
         self.name = "Megaman"
         self.hp = 1000
-        #moved battlechip dictionary into Class due to accessibility issues
+        # moved battlechip dictionary into Class due to accessibility issues
         self.battle_chips = {
             "long_sword": 80,
             "wide_sword": 80,
@@ -156,11 +132,11 @@ class Megaman:
         }
 
     def megaman_attack(self):
-        #randomly select a battle chip from self.battle_chips dictionary
+        # randomly select a battle chip from self.battle_chips dictionary
         chip, power = random.choice(list(self.battle_chips.items()))
-        print(f"{self.name} atacks with {chip} dealing {power} damage!")
+        print(f"\t{self.name} atacks with {chip} dealing {power} damage!")
 
     def megaman_take_damage(self, damage):
         self.hp -= damage
         if self.hp <= 0:
-            print(f"{self.name} has been deleted! Game Over!")
+            print(f"\t{self.name} has been deleted! Game Over!")
