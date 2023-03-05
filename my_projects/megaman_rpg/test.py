@@ -1,29 +1,4 @@
-#!/usr/bin/python3
-
-import random
-# Create a simple RPG game for the video game character Megaman.exe
-
-# Display a start Menu to users with Title, start game, close game
-
-# Once megaman is logged into the net he will start in ACDC Area
-
-# Areas will be ACDC, SciLab, Oran_Island, Undernet, Secret_Area
-
-# Megaman will battle viruses in each area in order to earn bug frags
-
-# He will have option to skip the areas without bosses to finish the game, but he will not be able to access the secret area and face the secret boss without clearing each room
-
-# Megaman will be given a folder of battlechips to be used
-
-# turn based combat system where the player will attack first followed by an enemy attack
-
-# Megaman will have a starting HP of 1000 and the player will have the option to bypass rooms without a boss
-
-# Battle Chip Library will include recovery chips so that the player doesn't have to restart
-
-# Boss Battle will be Dark_Megaman
-
-# Secret area battle will be Bass after beating every virus/boss and collecting the bug frags
+import random 
 
 cyber_net = {
     "Home Page": "Welcome to Megaman's Homepage! Proceed if you would like to bust some viruses.",
@@ -164,3 +139,53 @@ class Megaman:
         self.hp -= damage
         if self.hp <= 0:
             print(f"{self.name} has been deleted! Game Over!")
+
+current_room = "Home Page"
+
+# Create the session state for the game using a while loop
+while True:
+    # Display a description of the room to the player
+    print(cyber_net[current_room])
+    player_instance = Megaman()
+
+    # condition to check if the player has reached the end of the game
+    if current_room == "Exit":
+        print("You have reached the end of the game.")
+        break
+
+    if current_room == "ACDC Area" and "virus" in cyber_net[current_room]:
+        virus_instance = Virus()
+        virus_name = virus_instance.name
+        print(f"There is a {virus_name} in this room, defeat it to continue.")
+
+        while True:
+            fight_virus = input("Would you like to fight the virus? (y/n)")
+
+            if fight_virus.lower() == "y":
+                player_instance.attack
+                virus_instance.attack
+                virus_instance.virus_take_damage
+                if virus_instance.hp <= 0:
+                    print(f"You defeated the {virus_name}! Please proceed to the next area")
+                    break
+                else:
+                    print(f"You were not able to defeat the {virus_name} virus. Please try again.")
+            
+            elif fight_virus.lower() =="n":
+                print("You cannot proceed until you defeat the virus.")
+                break
+
+            else:
+                print("Invalid input. Please enter 'y' or 'n'.")
+
+    # Check which room exits the player wants to take
+    available_exits = exits[current_room]
+    print("Available Exits:", available_exits)
+    chosen_exit = input(
+        "Which of these areas would you like to proceed towards?")
+
+    # Condition for whether or not the chosen exit is valid
+    if chosen_exit in available_exits:
+        current_room = chosen_exit
+    else:
+        print("That is not a valid exit, please try again.")
