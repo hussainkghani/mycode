@@ -1,5 +1,7 @@
+#!/usr/bin/python3
 import random
 
+#Created a dict and added a value in [1] to depict enemy 
 cyber_net = {
     "Home Page": ["Welcome to Megaman's Homepage! Proceed if you would like to bust some viruses.", "Virus"],
     "ACDC Area": ["You have entered the net for ACDC town.", "Virus"],
@@ -24,6 +26,7 @@ exits = {
 
 class Virus:
     def __init__(self):
+        #dictionary of random viruses with name, attack, and hp values
         virus_names = [("Mettaur", 100, 50),
                        ("Fishy", 150, 70),
                        ("Bunny", 130, 60),
@@ -32,35 +35,41 @@ class Virus:
                        ("Totem", 140, 70),
                        ("Weather", 200, 70),
                        ("Cactikil", 100, 50)]
-
+        #set the value of virus to a random one from virus_names
         virus = random.choice(virus_names)
         self.name = virus[0]
         self.hp = virus[1]
         self.attack = virus[2]
 
+    #method for virus attack and damage dealt
     def virus_attack_player(self):
         print(f"\t{self.name} attacks and deals {self.attack} damage!")
 
+    #method to calculate the virus damage taken by subtracting from hp
     def virus_take_damage(self, damage):
         self.hp -= damage
+        #display a message once the virus hp falls below 0
         if self.hp <= 0:
             print(f"\t{self.name} virus has been deleted.")
 
 
 class Boss:
     def __init__(self):
+        #random set of bosses with name, hp, and attack values
         boss_names = [("Flashman", 300, 100),
                       ("Bubbleman", 300, 90),
                       ("Shademan", 350, 120)]
-
+        #boss variable set to random choice from boss_names
         boss = random.choice(boss_names)
         self.name = boss[0]
         self.hp = boss[1]
         self.attack = boss[2]
 
+    #method for boss attack and damage dealt
     def boss_attack_player(self):
         print(f"\t{self.name} attacks and deals {self.attack} damage!")
 
+    #method for bass damage taken based on hp - damage parameter
     def boss_take_damage(self, damage):
         self.hp -= damage
         if self.hp <= 0:
@@ -70,6 +79,7 @@ class Boss:
 class Secret_Boss:
     def __init__(self):
         self.name = "Dark Megaman"
+        #this dict is the same one that megaman uses
         self.dark_chips = {
             "long_sword": 80,
             "wide_sword": 80,
@@ -93,11 +103,13 @@ class Secret_Boss:
         }
         self.hp = 500
 
+    #using same method of selecting random battlechips as megaman class
     def secret_boss_attack(self):
         # randomy select battle chip from dictionary
         chip, power = random.choice(list(self.dark_chips.items()))
         print(f"\t{self.name} atacks with {chip} dealing {power} damage!")
 
+    #damage calc is the same as the other classes
     def secret_boss_take_damage(self, damage):
         self.hp -= damage
         if self.hp <= 0:
